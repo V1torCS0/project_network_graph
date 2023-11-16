@@ -2,17 +2,20 @@
 
 project_network_graph/
 │
+├── **README**.md
+│
 ├── package/
 │   ├── __init__.py
 │   │
-│   ├── source/
-│   │   └── module_dfs.py
+│   ├── modules/
+│   │   ├── ManipulationFile.py
+│   │   └── NetworkGraph.py
 │   │
 │   └── testing/
 │       ├── Arquivo G1.txt
-│       └── ...
-│   
+│       ├── Arquivo G2.txt
+│       └── Arquivo G3.txt
 │
-└── launch_environment/
+└── source/
     ├── main.py
     └── playground.py
