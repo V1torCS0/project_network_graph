@@ -136,6 +136,10 @@ class NetworkGraph:
 
     def dfs(self) -> None:
 
+        if not self.__nodes:
+            print("This is a Null Network Graph, DFS doesn't work")
+            return None
+
         self.__plot_Graph(only_view= True)
         
         for node in self.__graph.nodes:
