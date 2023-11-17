@@ -1,5 +1,5 @@
 **Estrutura do Diretório para o Projeto**
-.
+```
 ├── README.md
 ├── folder_structure.md
 ├── package
@@ -24,5 +24,5 @@
 └── source
 ├── main.py
 └── playground.py
-
+```
 7 directories, 18 files
