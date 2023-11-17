@@ -1,21 +1,28 @@
 **Estrutura do Diretório para o Projeto**
-
-project_network_graph/
-│
-├── **README**.md
-│
-├── package/
-│   ├── __init__.py
-│   │
-│   ├── modules/
-│   │   ├── ManipulationFile.py
-│   │   └── NetworkGraph.py
-│   │
-│   └── testing/
-│       ├── Arquivo G1.txt
-│       ├── Arquivo G2.txt
-│       └── Arquivo G3.txt
-│
-└── source/
-    ├── main.py
-    └── playground.py
+```
+├── README.md
+├── folder_structure.md
+├── package
+│   ├── **init**.py
+│   ├── **pycache**
+│   │   └── **init**.cpython-311.pyc
+│   ├── modules
+│   │   ├── ManipulationFile.py
+│   │   ├── NetworkGraph.py
+│   │   └── **pycache**
+│   │   ├── ManipulationFile.cpython-311.pyc
+│   │   ├── NetworkGraph.cpython-311.pyc
+│   │   ├── dfs.cpython-311.pyc
+│   │   ├── module_dfs.cpython-311.pyc
+│   │   ├── network_graph.cpython-311.pyc
+│   │   └── network_graph_file.cpython-311.pyc
+│   └── testing
+│   ├── Arquivo G1.txt
+│   ├── Arquivo G2.txt
+│   ├── Arquivo G3.txt
+│   └── Arquivo G4.txt
+└── source
+├── main.py
+└── playground.py
+```
+7 directories, 18 files
