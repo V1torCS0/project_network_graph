@@ -5,9 +5,9 @@ import networkx as nx
 class NetworkGraph:
     
     def __init__(self, edge_list: list, node_list: list) -> None:
-        self.__num_of_edges = edge_list[0]
+        self.__num_of_edges = int(edge_list[0])
         self.__type_graph = edge_list[1]        
-        self.__num_of_nodes = node_list[0]
+        self.__num_of_nodes = int(node_list[0])
         self.__edges = self.__set_edge_list(edge_list)
         self.__nodes = self.__set_node_list(node_list)
         self.__graph = self.__init_Graph_nx()
@@ -28,7 +28,7 @@ class NetworkGraph:
     def __set_node_list(self, node_list):
         if len(node_list) > 1:
             return node_list[1:]
-        return [] 
+        return [nodes for nodes in range(self.__num_of_nodes)] 
 
 
     def __init_Graph_nx(self) -> nx.DiGraph | nx.Graph:
@@ -52,29 +52,34 @@ class NetworkGraph:
                 
 
     def __degree_order(self) -> dict[str: int]:
-        nodes_degree = dict()
+        if self.__num_of_nodes:
 
-        if self.__type_graph == 'D':
-            nodes_degree = {node: self.__graph.out_degree[node] for node in self.__graph.nodes}
-        else:
-            nodes_degree = {node: self.__graph.degree[node] for node in self.__graph.nodes}
+            nodes_degree = dict()
 
-        nodes_degree = dict(sorted(nodes_degree.items(),
-                               key=lambda value: value[1],
-                               reverse=True))
-        return nodes_degree
+            if self.__type_graph == 'D':
+                nodes_degree = {node: self.__graph.out_degree[node] for node in self.__graph.nodes}
+            else:
+                nodes_degree = {node: self.__graph.degree[node] for node in self.__graph.nodes}
+
+            nodes_degree = dict(sorted(nodes_degree.items(),
+                                key=lambda value: value[1],
+                                reverse=True))
+            return nodes_degree
+        return None
 
 
     def __define_type_edge(self) -> dict[str: str]:
         if self.__graph and self.__num_of_edges:
             return {edge: 'black' for edge in self.__graph.edges}
+        return None
     
     def get_type_edge_dict(self):
-        return self.__edges_type_dict
+        return self.__degree_dict
 
     def __define_vector_step(self) -> dict[str: int]:
         if self.__graph and self.__num_of_nodes:
             return {node: 0 for node in self.__graph.nodes}
+        return None
 
 
     def __plot_Graph(self, only_view= False) -> None:
@@ -98,31 +103,35 @@ class NetworkGraph:
                 
             nx.draw(self.__graph, position, node_size= 650,
                     node_color= [self.__graph.nodes[node]['color'] for node in self.__graph.nodes],
-                    edgecolors= 'black', edge_color= [edge[1] for edge in self.__edges_type_dict.items()],
+                    edgecolors= 'black',
+                    edge_color= None if self.__edges_type_dict is None else [edge[1] for edge in self.__edges_type_dict.items()],
                     ax= self.__plot_axes)
         plt.pause(0.5)
 
     
-    def __edge_type_exists(self, node_out, node_in):
+    def __edge_type_exists(self, node_out, node_in) -> None:
         if (node_out, node_in) in self.__edges_type_dict:
             return (node_out, node_in)
         return (node_in, node_out)
 
 
-    def __set_edge_type(self, node_out, node_in):
-        if self.__graph.nodes[node_in]['color'] == 'white':
-            self.__edges_type_dict[(node_out, node_in)] = 'blue'
+    def __set_edge_type(self, node_out, node_in) -> None:
+        if not self.__edges_type_dict is None:
 
-        elif self.__graph.nodes[node_in]['color'] == 'gray' and self.__edges_type_dict[self.__edge_type_exists(node_out, node_in)] == 'black':
-            self.__edges_type_dict[self.__edge_type_exists(node_out, node_in)] = 'deeppink'
+            if self.__graph.nodes[node_in]['color'] == 'white':
+                self.__edges_type_dict[(node_out, node_in)] = 'blue'
 
-        elif self.__edges_type_dict[self.__edge_type_exists(node_out, node_in)] == 'black':
-            
-            if self.__d_dict[node_out] < self.__d_dict[node_in]:
-                self.__edges_type_dict[self.__edge_type_exists(node_out, node_in)] = 'orange'
-                return None
+            elif self.__graph.nodes[node_in]['color'] == 'gray' and self.__edges_type_dict[self.__edge_type_exists(node_out, node_in)] == 'black':
+                self.__edges_type_dict[self.__edge_type_exists(node_out, node_in)] = 'deeppink'
 
-            self.__edges_type_dict[self.__edge_type_exists(node_out, node_in)] = 'red'
+            elif self.__edges_type_dict[self.__edge_type_exists(node_out, node_in)] == 'black':
+                
+                if self.__d_dict[node_out] < self.__d_dict[node_in]:
+                    self.__edges_type_dict[self.__edge_type_exists(node_out, node_in)] = 'orange'
+                    return None
+
+                self.__edges_type_dict[self.__edge_type_exists(node_out, node_in)] = 'red'
+        return None
 
 
     def dfs(self) -> None:
