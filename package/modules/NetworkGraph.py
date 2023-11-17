@@ -5,9 +5,11 @@ import networkx as nx
 class NetworkGraph:
     
     def __init__(self, edge_list: list, node_list: list) -> None:
-        self.__type_graph = edge_list[1]
-        self.__edges = edge_list[2:]
-        self.__nodes = node_list[1:]
+        self.__num_of_edges = edge_list[0]
+        self.__type_graph = edge_list[1]        
+        self.__num_of_nodes = node_list[0]
+        self.__edges = self.__set_edge_list(edge_list)
+        self.__nodes = self.__set_node_list(node_list)
         self.__graph = self.__init_Graph_nx()
         self.__edges_type_dict = self.__define_type_edge()
         self.__degree_dict = self.__degree_order()        
@@ -16,13 +18,28 @@ class NetworkGraph:
         self.__mark = 0
         self.__plot_axes = plt.gca()
 
+
+    def __set_edge_list(self, edge_list):
+        if len(edge_list) > 2:
+            return edge_list[2:]
+        return []
+    
+
+    def __set_node_list(self, node_list):
+        if len(node_list) > 1:
+            return node_list[1:]
+        return [] 
+
+
     def __init_Graph_nx(self) -> nx.DiGraph | nx.Graph:
         G = self.__define_Graph_nx()
-        G.add_edges_from(self.__edges)
-        G.add_nodes_from(self.__nodes)
+        
+        if self.__edges or self.__nodes:
+            G.add_edges_from(self.__edges)
+            G.add_nodes_from(self.__nodes)
 
-        for node in G.nodes:
-            G.nodes[node]['color'] = 'red'
+            for node in G.nodes:
+                G.nodes[node]['color'] = 'red'
 
         return G
 
@@ -34,10 +51,6 @@ class NetworkGraph:
             return nx.Graph()
                 
 
-    def get_all(self):
-        return (self.__d_dict, self.__f_dict)
-
-    
     def __degree_order(self) -> dict[str: int]:
         nodes_degree = dict()
 
@@ -53,12 +66,14 @@ class NetworkGraph:
 
 
     def __define_type_edge(self) -> dict[str: str]:
-        if (self.__graph):
+        if self.__graph and self.__num_of_edges:
             return {edge: 'black' for edge in self.__graph.edges}
     
+    def get_type_edge_dict(self):
+        return self.__edges_type_dict
 
     def __define_vector_step(self) -> dict[str: int]:
-        if (self.__graph):
+        if self.__graph and self.__num_of_nodes:
             return {node: 0 for node in self.__graph.nodes}
 
 
@@ -85,19 +100,29 @@ class NetworkGraph:
                     node_color= [self.__graph.nodes[node]['color'] for node in self.__graph.nodes],
                     edgecolors= 'black', edge_color= [edge[1] for edge in self.__edges_type_dict.items()],
                     ax= self.__plot_axes)
-        plt.pause(0.75)
+        plt.pause(0.5)
+
+    
+    def __edge_type_exists(self, node_out, node_in):
+        if (node_out, node_in) in self.__edges_type_dict:
+            return (node_out, node_in)
+        return (node_in, node_out)
 
 
     def __set_edge_type(self, node_out, node_in):
         if self.__graph.nodes[node_in]['color'] == 'white':
             self.__edges_type_dict[(node_out, node_in)] = 'blue'
-        elif self.__graph.nodes[node_in]['color'] == 'gray':
-            self.__edges_type_dict[(node_out, node_in)] = 'deeppink'
-        else:
+
+        elif self.__graph.nodes[node_in]['color'] == 'gray' and self.__edges_type_dict[self.__edge_type_exists(node_out, node_in)] == 'black':
+            self.__edges_type_dict[self.__edge_type_exists(node_out, node_in)] = 'deeppink'
+
+        elif self.__edges_type_dict[self.__edge_type_exists(node_out, node_in)] == 'black':
+            
             if self.__d_dict[node_out] < self.__d_dict[node_in]:
-                self.__edges_type_dict[(node_out, node_in)] = 'orange'
-            else:
-                self.__edges_type_dict[(node_out, node_in)] = 'red'
+                self.__edges_type_dict[self.__edge_type_exists(node_out, node_in)] = 'orange'
+                return None
+
+            self.__edges_type_dict[self.__edge_type_exists(node_out, node_in)] = 'red'
 
 
     def dfs(self) -> None:
@@ -121,6 +146,8 @@ class NetworkGraph:
         self.__mark += 1
         self.__d_dict[node] = self.__mark
 
+        self.__plot_Graph()
+
         for adjancency_node in self.__graph.neighbors(node):
             if self.__graph.nodes[adjancency_node]['color'] == 'white':
                 self.__set_edge_type(node, adjancency_node)
@@ -133,3 +160,4 @@ class NetworkGraph:
         self.__graph.nodes[node]['color'] = 'black'
         self.__mark += 1
         self.__f_dict[node] = self.__mark
+
