@@ -9,5 +9,5 @@ from package.modules import NetworkGraph as ng
 teste = mf.ManipulationFile('../project_network_graph/package/testing/Arquivo G6.txt')
 
 G = ng.NetworkGraph(teste.edges_in_Graph(), teste.nodes_in_Graph())
-print(G.get_type_edge_dict())
+
 G.dfs()

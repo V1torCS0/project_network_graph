@@ -73,8 +73,6 @@ class NetworkGraph:
             return {edge: 'black' for edge in self.__graph.edges}
         return None
     
-    def get_type_edge_dict(self):
-        return self.__degree_dict
 
     def __define_vector_step(self) -> dict[str: int]:
         if self.__graph and self.__num_of_nodes:
@@ -91,21 +89,29 @@ class NetworkGraph:
                     node_color= [self.__graph.nodes[node]['color'] for node in self.__graph],
                     edgecolors= 'black', ax= self.__plot_axes)
             plt.pause(2.0)
+            return None
 
-        if not only_view:
-            self.__plot_axes.clear()
-            plt.title('DFS Visualization')
+        self.__plot_axes.clear()
+        plt.title('DFS Visualization')
 
-            for node, (x, y) in position.items():
-                self.__plot_axes.text(x, y, f'{self.__d_dict[node]}/{self.__f_dict[node]}',
-                    color= 'white' if self.__graph.nodes[node]['color'] != 'white' else 'black',
-                    fontsize= 10, ha= 'center', va= 'center')
+        edges_legend = [
+            plt.Line2D([0], [0], color= 'blue', linewidth= 2, label= 'Árvore'),
+            plt.Line2D([0], [0], color= 'deeppink', linewidth= 2, label= 'Retorno'),
+            plt.Line2D([0], [0], color= 'orange', linewidth= 2, label= 'Avanço'),
+            plt.Line2D([0], [0], color= 'red', linewidth= 2, label= 'Cruzamento')
+        ]
+        plt.legend(handles= edges_legend, loc='best')
+
+        for node, (x, y) in position.items():
+            self.__plot_axes.text(x, y, f'{self.__d_dict[node]}/{self.__f_dict[node]}',
+                color= 'white' if self.__graph.nodes[node]['color'] != 'white' else 'black',
+                fontsize= 10, ha= 'center', va= 'center')
                 
-            nx.draw(self.__graph, position, node_size= 650,
-                    node_color= [self.__graph.nodes[node]['color'] for node in self.__graph.nodes],
-                    edgecolors= 'black',
-                    edge_color= None if self.__edges_type_dict is None else [edge[1] for edge in self.__edges_type_dict.items()],
-                    ax= self.__plot_axes)
+        nx.draw(self.__graph, position, node_size= 650,
+                node_color= [self.__graph.nodes[node]['color'] for node in self.__graph.nodes],
+                edgecolors= 'black',
+                edge_color= None if self.__edges_type_dict is None else [edge[1] for edge in self.__edges_type_dict.items()],
+                ax= self.__plot_axes)
         plt.pause(0.5)
 
     
