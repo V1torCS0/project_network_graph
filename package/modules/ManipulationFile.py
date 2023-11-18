@@ -3,8 +3,9 @@ from pathlib import Path
 
 class ManipulationFile:
 
-    def __init__(self, string_path) -> None:
-        self.__document_access = Path(string_path)
+    def __init__(self, string_path: str) -> None:
+        self.__name_file = string_path
+        self.__document_access = Path('../project_network_graph/package/testing/' + self.__name_file)
         self.__lines_document = self.__read_input_document()
 
 
@@ -14,8 +15,13 @@ class ManipulationFile:
         return None
     
 
-    def set_input_document(self, new_string_path) -> None:
-        self.__document_access = Path(new_string_path)
+    def set_name_file(self, new_string_path: str) -> None:
+        self.__name_file = new_string_path
+        self.__set_input_document()
+
+    
+    def __set_input_document(self):
+        self.__document_access = Path('../project_network_graph/package/testing/' + self.__name_file)
         self.__set_lines_input_document()
 
 
@@ -35,9 +41,34 @@ class ManipulationFile:
         return []
     
     
-    def __write_output_document(self) -> None:
-        # with open(f'../project_network_graph/package/testing/OutPut ({self.__document_access}).txt', 'w') as output_manager_file:
-        ...
+    def generate_output(self, edge_types_dict: dict, d_array_step: dict, f_array_step: dict) -> None:
+        if d_array_step is None and f_array_step is None:
+            print("Invalid Input")
+            return None
+        self.__write_output_document(edge_types_dict, d_array_step, f_array_step)
+
+
+    def __write_output_document(self, edge_dict: dict, d_array: dict, f_array: dict) -> None:
+        path_write = Path(f'../project_network_graph/package/testing/OutPut({self.__name_file}).txt')
+        
+        if path_write.exists():
+            print(f'OutPut already exists... access: {path_write}')
+            return None
+        
+        with open(path_write, 'w') as output_manager_file:
+            
+            if not edge_dict is None:
+                preview_edge_type = {'blue': 'Arvore', 'deeppink': 'Retorno',
+                                   'orange': 'Avanco', 'red': 'Cruzamento'}
+                for edge, edge_type in edge_dict.items():
+                    output_manager_file.write(f'{edge}: {preview_edge_type[edge_type]}\n')
+
+            else:
+                output_manager_file.write('No edges in network graph...\n')
+            output_manager_file.write('\n')
+            output_manager_file.write(f'{d_array}\n')
+            output_manager_file.write(f'{f_array}\n')
+            print(f'Output Successfully, access: {path_write}')
 
 
     def edges_in_Graph(self) -> list[str] | list[None]:

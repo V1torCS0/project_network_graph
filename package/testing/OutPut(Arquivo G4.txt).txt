@@ -1,0 +1,9 @@
+('a', 'b'): Arvore
+('a', 'c'): Retorno
+('a', 'f'): Retorno
+('b', 'c'): Arvore
+('b', 'd'): Arvore
+('d', 'f'): Arvore
+
+{'a': 1, 'b': 2, 'c': 3, 'd': 5, 'f': 6}
+{'a': 10, 'b': 9, 'c': 4, 'd': 8, 'f': 7}
