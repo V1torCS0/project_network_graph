@@ -6,11 +6,12 @@ class ManipulationFile:
     def __init__(self, string_path: str) -> None:
         self.__name_file = string_path
         self.__document_access = Path('../project_network_graph/package/testing/' + self.__name_file)
+        self.exists = self.__document_access.exists()
         self.__lines_document = self.__read_input_document()
 
 
     def get_input_document(self) -> Path:
-        if self.__document_access.exists():
+        if self.exists:
             return self.__document_access
         return None
     
@@ -34,7 +35,7 @@ class ManipulationFile:
 
 
     def __read_input_document(self) -> list[str] | list[None]:
-        if self.__document_access.exists():
+        if self.exists:
             with open(self.__document_access, 'r') as input_manager_file:
                 if input_manager_file:
                     return input_manager_file.readlines()
@@ -49,7 +50,7 @@ class ManipulationFile:
 
 
     def __write_output_document(self, edge_dict: dict, d_array: dict, f_array: dict) -> None:
-        path_write = Path(f'../project_network_graph/package/testing/OutPut({self.__name_file}).txt')
+        path_write = Path(f'../project_network_graph/package/testing/OutPut_{self.__name_file.replace(".txt", "").replace(" ", "-")}.txt')
         
         if path_write.exists():
             print(f'OutPut already exists... access: {path_write}')
@@ -66,8 +67,8 @@ class ManipulationFile:
             else:
                 output_manager_file.write('No edges in network graph...\n')
             output_manager_file.write('\n')
-            output_manager_file.write(f'{d_array}\n')
-            output_manager_file.write(f'{f_array}\n')
+            output_manager_file.write(f'Vetor d: {list(map(lambda d_value: d_value[1], d_array.items()))}\n')
+            output_manager_file.write(f'Vetor f: {list(map(lambda f_value: f_value[1], f_array.items()))}\n')
             print(f'Output Successfully, access: {path_write}')
 
 
@@ -104,4 +105,3 @@ class ManipulationFile:
             node_list.extend(list(node_set))
             return node_list
         return []
-

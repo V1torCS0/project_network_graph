@@ -18,6 +18,7 @@ class NetworkGraph:
         self.__mark = 0
         self.__plot_axes = plt.gca()
 
+
     def get_edge_types_dict(self):
         return self.__edge_types_dict
     
@@ -106,13 +107,13 @@ class NetworkGraph:
         self.__plot_axes.clear()
         plt.title('DFS Visualization')
 
-        edges_legend = [
+        edges_subtitle = [
             plt.Line2D([0], [0], color= 'blue', linewidth= 2, label= 'Árvore'),
             plt.Line2D([0], [0], color= 'deeppink', linewidth= 2, label= 'Retorno'),
             plt.Line2D([0], [0], color= 'orange', linewidth= 2, label= 'Avanço'),
             plt.Line2D([0], [0], color= 'red', linewidth= 2, label= 'Cruzamento')
         ]
-        plt.legend(handles= edges_legend, loc='best')
+        plt.legend(handles= edges_subtitle, loc='best')
 
         for node, (x, y) in position.items():
             self.__plot_axes.text(x, y, f'{self.__d_dict[node]}/{self.__f_dict[node]}',
@@ -193,3 +194,4 @@ class NetworkGraph:
         self.__f_dict[node] = self.__mark
 
         self.__plot_Graph()
+        
