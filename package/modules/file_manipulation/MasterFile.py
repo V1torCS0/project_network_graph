@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-class ManipulationFile:
+class MasterFile:
 
     def __init__(self, string_path: str) -> None:
         self.__name_file = string_path
@@ -50,7 +50,7 @@ class ManipulationFile:
 
 
     def __write_output_document(self, edge_dict: dict, d_array: dict, f_array: dict) -> None:
-        path_write = Path(f'../project_network_graph/package/testing/OutPut_{self.__name_file.replace(".txt", "").replace(" ", "-")}.txt')
+        path_write = Path(f'../project_network_graph/package/testing/output_{self.__name_file.replace(".txt", "").replace(" ", "-")}.txt')
         
         if path_write.exists():
             print(f'OutPut already exists... access: {path_write}')
@@ -72,7 +72,7 @@ class ManipulationFile:
             print(f'Output Successfully, access: {path_write}')
 
 
-    def edges_in_Graph(self) -> list[str] | list[None]:
+    def edges_in_graph(self) -> list[tuple] | list[None]:
 
         if self.__lines_document:
             edge_list = []
@@ -88,7 +88,7 @@ class ManipulationFile:
         return []
 
 
-    def nodes_in_Graph(self) -> list[str] | list[None]:
+    def nodes_in_graph(self) -> list[str] | list[None]:
 
         if self.__lines_document:
             node_list = []

@@ -1,0 +1,3 @@
+class Base:
+    def exec(self) -> None:
+        ...
