@@ -5,10 +5,10 @@ class DFS(Base):
     def __init__(self) -> None:
         ...
 
-    def exec(self) -> None:
-        return "DFS executing..."
 
-        """ if not self.__nodes:
+    def exec(self) -> None:
+
+        if not self.__nodes:
             print("This is a Null Network Graph, DFS doesn't work")
             return None
         
@@ -17,7 +17,7 @@ class DFS(Base):
         
         for accessed_node in self.__degree_dict.items():
             if self.__graph.nodes[accessed_node[0]]['color'] == 'white':
-                self.__step(accessed_node[0]) """
+                self.__step(accessed_node[0])
     
 
     def __step(self, node: str) -> None:
@@ -60,3 +60,7 @@ class DFS(Base):
 
                 self.__edge_types_dict[self.__Edge_Type_Exists(node_out, node_in)] = 'red'
         return None
+        
+    
+    def show(self) -> None:
+        ...

@@ -6,5 +6,9 @@ class BFS(Base):
         ...
     
 
-    def exec(self):
-        return "BFS executing..."
+    def exec(self) -> None:
+        ...
+        
+    
+    def show(self) -> None:
+        ...
